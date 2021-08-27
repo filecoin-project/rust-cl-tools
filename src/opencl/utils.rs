@@ -59,17 +59,34 @@ fn get_pci_id(device: &ocl::Device) -> GPUResult<PciId> {
     Ok(id.into())
 }
 
-//fn get_uuid(device: &opencl3::device::Device) -> GPUResult<DeviceUuid> {
-//    let uuid_vec = device.uuid_khr()?;
-//    assert_eq!(
-//        uuid_vec.len(),
-//        CL_UUID_SIZE_KHR,
-//        "opencl3 returned an invalid UUID: {:?}",
-//        uuid_vec
-//    );
-//    // Unwrap is safe due to the assert
-//    let uuid: [u8; CL_UUID_SIZE_KHR] = uuid_vec.try_into().unwrap();
-//    Ok(uuid.into())
+//fn get_uuid(device: &ocl::Device) -> GPUResult<DeviceUuid> {
+//            const CL_DEVICE_TOPOLOGY_AMD: u32 = 0x4037;
+//            let result = device.info_raw(CL_DEVICE_TOPOLOGY_AMD)?;
+//            let size = std::mem::size_of::<cl_amd_device_topology>();
+//            assert_eq!(result.len(), size);
+//            let mut topo = cl_amd_device_topology::default();
+//            unsafe {
+//                std::slice::from_raw_parts_mut(
+//                    &mut topo as *mut cl_amd_device_topology as *mut u8,
+//                    size,
+//                )
+//                .copy_from_slice(&result);
+//            }
+//            let bus_id = topo.bus as u16;
+//            let device_id = topo.device as u16;
+//            (bus_id << 8) | device_id
+//
+//
+//   let uuid_vec = device.uuid_khr()?;
+//   assert_eq!(
+//       uuid_vec.len(),
+//       CL_UUID_SIZE_KHR,
+//       "opencl3 returned an invalid UUID: {:?}",
+//       uuid_vec
+//   );
+//   // Unwrap is safe due to the assert
+//   let uuid: [u8; CL_UUID_SIZE_KHR] = uuid_vec.try_into().unwrap();
+//   Ok(uuid.into())
 //}
 
 pub fn cache_path(device: &Device, cl_source: &str) -> std::io::Result<std::path::PathBuf> {

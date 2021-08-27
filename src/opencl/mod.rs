@@ -498,11 +498,11 @@ impl Program {
 /// passed into a [`Kernel`].
 pub trait KernelArgument<'a> {
     /// Apply the kernel argument to the kernel.
-    fn push(&self, kernel: &mut Kernel<'a>);
+    fn push(&self, kernel: &mut Kernel);
 }
 
-impl<'a, T> KernelArgument<'a> for &'a Buffer<T> {
-    fn push(&self, kernel: &mut Kernel<'a>) {
+impl<'a, T> KernelArgument<'a> for Buffer<T> {
+    fn push(&self, kernel: &mut Kernel) {
         kernel.builder.arg(&self.buffer);
     }
 }
@@ -545,7 +545,7 @@ pub struct Kernel<'a> {
 
 impl<'a> Kernel<'a> {
     /// Set a kernel argument.
-    pub fn arg<T: KernelArgument<'a>>(mut self, t: T) -> Self {
+    pub fn arg<T: KernelArgument<'a>>(mut self, t: &'a T) -> Self {
         t.push(&mut self);
         self
     }
